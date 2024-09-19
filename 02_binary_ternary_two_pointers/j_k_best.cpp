@@ -37,7 +37,20 @@ int main() {
             l = m + 1;
         }
     }
-    for (int i = n - k; i < n; ++i) {
-        cout << values[i].second << '\n';
+    if (res < 0) {
+        m--;
+        for (int i = 0; i < n; ++i) {
+            values[i] = {calculate(vw[i], m), i};
+        }
+        std::sort(values.begin(), values.end());
+    }
+
+    vector<int> ans(k);
+    for (int i = 0, j = n - k; i < k, j < n; ++i, ++j) {
+        ans[i] = values[j].second;
+    }
+    std::sort(ans.begin(), ans.end());
+    for (int i = 0; i < k; ++i) {
+        cout << ans[i] << '\n';
     }
 }
