@@ -2,12 +2,8 @@
 
 using namespace std;
 
-double value(int v, int w) {
-    return ((double) v) / w;
-}
-
-bool compare(pair<pair<int, int>, int> a, pair<pair<int, int>, int> b) {
-    return value(a.first.first, a.first.second) < value(b.first.first, b.first.second);
+int calculate(const pair<int, int>& vw, int c) {
+    return vw.first - (c * vw.second);
 }
 
 int main() {
@@ -17,21 +13,31 @@ int main() {
     int n, k;
     cin >> n >> k;
 
-    vector<pair<pair<int, int>, int>> vwi(n);
+    vector<pair<int, int>> vw(n);
 
     for (int i = 0; i < n; ++i) {
-        cin >> vwi[i].first.first >> vwi[i].first.second;
-        vwi[i].second = i;
+        cin >> vw[i].first >> vw[i].second;
     }
 
-    std::sort(vwi.begin(), vwi.end(), compare);
-
-    vector<int> ans;
+    int l = 0, r = 1e9, m, res;
+    vector<pair<int, int>> values(n);
+    while (l < r) {
+        m = l + ((r - l) / 2);
+        for (int i = 0; i < n; ++i) {
+            values[i] = {calculate(vw[i], m), i};
+        }
+        std::sort(values.begin(), values.end());
+        res = 0;
+        for (int i = n - k; i < n; ++i) {
+            res += values[i].first;
+        }
+        if (res < 0) {
+            r = m;
+        } else {
+            l = m + 1;
+        }
+    }
     for (int i = n - k; i < n; ++i) {
-        ans.push_back(vwi[i].second + 1);
-    }
-    std::sort(ans.begin(), ans.end());
-    for (int i = 0; i < k; ++i) {
-        cout << ans[i] << '\n';
+        cout << values[i].second << '\n';
     }
 }

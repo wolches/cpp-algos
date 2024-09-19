@@ -9,22 +9,28 @@ int main() {
     int n, q;
     cin >> n;
 
-    vector<double> data(n);
+    vector<pair<int, int>> data(n);
     for (int i = 0; i < n; ++i) {
-        cin >> data[i];
+        cin >> data[i].first;
+        data[i].second = i;
     }
 
+    std::sort(data.begin(), data.end());
+
     cin >> q;
-    int l, r, x;
+    int l, r, x, found;
+
     for (int i = 0; i < q; ++i) {
         cin >> l >> r >> x;
-        bool has = false;
-        for (int j = l - 1; j < r; ++j) { // O (N ^ 2)
-            if (data[j] == x) {
-                has = true;
+        found = distance(data.begin(), lower_bound(data.begin(), data.end(), make_pair(x, l - 1)));
+        bool condition = false;
+        while (data[found].first == x && found < data.size()) {
+            if (data[found].first == x && data[found].second >= l - 1 && data[found].second <= r - 1) {
+                condition = true;
                 break;
             }
+            found++;
         }
-        cout << (has ? 1 : 0);
+        cout << (condition ? 1 : 0);
     }
 }
