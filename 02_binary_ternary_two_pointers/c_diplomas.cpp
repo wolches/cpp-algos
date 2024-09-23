@@ -9,19 +9,21 @@ int main() { // TODO
     unsigned long long w, h, n;
     cin >> n >> w >> h;
 
-    unsigned long long l = 0, r = (w > h ? w : h) * n, m;
+    unsigned long long l = 0, r = (w > h ? w : h) * n, m, hCount, wCount;
     while (l < r) {
         m = ((r - l) / 2) + l;
-        unsigned long long hCount = m / h;
-        unsigned long long wCount = m / w;
-        unsigned long long rem = n % wCount;
+        hCount = m / h;
+        wCount = m / w;
 
-        if (n / wCount >= hCount - rem) {
+        if (hCount == 0 || wCount < ((n + hCount - 1) / hCount)) {
             l = m + 1;
         } else {
             r = m;
         }
     }
-    cout << l;
+    hCount = (l - 1) / h;
+    wCount = (l - 1) / w;
+    bool decrement = (hCount > 1) && (wCount < ((n + hCount - 1) / hCount));
+    cout << (decrement ? l : l - 1);
 }
 
