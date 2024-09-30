@@ -2,6 +2,32 @@
 
 using namespace std;
 
+pair<int, int> find_max(vector<int> a) {
+    int ans = a[0];
+    int ans_l = 0;
+    int ans_r = 0;
+    int sum = 0;
+    int min_sum = 0;
+    int min_pos = -1;
+    for (int r = 0; r < a.size(); ++r) {
+        sum += a[r];
+
+        int cur = sum - min_sum;
+        if (cur > ans) {
+            ans = cur;
+            ans_l = min_pos + 1;
+            ans_r = r;
+        }
+
+        if (sum < min_sum) {
+            min_sum = sum;
+            min_pos = r;
+        }
+    }
+
+    return {ans_l, ans_r};
+}
+
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
