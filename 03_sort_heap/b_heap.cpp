@@ -20,7 +20,7 @@ public:
     void pop_top() {
         swap(values[1], values.back());
         values.pop_back();
-        sift_down(1, values.size() - 1);
+        sift_down(1, values.size());
     }
 
 private:
