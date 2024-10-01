@@ -50,3 +50,25 @@ private:
         }
     }
 };
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n;
+    cin >> n;
+
+    Heap heap;
+
+    int op, val;
+    for (int i = 0; i < n; ++i) {
+        cin >> op;
+        if (op == 0) {
+            cin >> val;
+            heap.add(val);
+        } else {
+            cout << heap.top() << '\n';
+            heap.pop_top();
+        }
+    }
+}
