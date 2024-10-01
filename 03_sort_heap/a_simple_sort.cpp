@@ -32,6 +32,33 @@ void quickSort(vector<int>& a, int l, int r) {
     quickSort(a, m.second, r);
 }
 
+void mergeSort(vector<int>& a, int l, int r) {
+    if (l + 1 >= r) {
+        return;
+    }
+    int m = l + (r - l) / 2;
+    mergeSort(a, l, m);
+    mergeSort(a, m, r);
+    int i = l, j = m, k = 0;
+    vector<int> b(r - l);
+
+    while (i < m || j < r) {
+        if (i == m) {
+            b[k++] = a[j++];
+        } else if (j == r) {
+            b[k++] = a[i++];
+        } else if (a[i] < a[j]) {
+            b[k++] = a[i++];
+        } else {
+            b[k++] = a[j++];
+        }
+    }
+    k = 0;
+    for (int i = l; i < r; ++i) {
+        a[i] = b[k++];
+    }
+}
+
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
@@ -44,5 +71,9 @@ int main() {
         cin >> data[i];
     }
 
+    mergeSort(data, 0, n);
 
+    for (int i = 0; i < n; ++i) {
+        cout << data[i] << ' ';
+    }
 }
