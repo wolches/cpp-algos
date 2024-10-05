@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+//#define int long long
 
 using namespace std;
 
@@ -11,7 +12,7 @@ int main() {
 
     vector<int> nums(n);
 
-    int sum = 0;
+    long long sum = 0;
     for (int i = 0; i < n; ++i) {
         cin >> nums[i];
         sum += nums[i];
@@ -24,7 +25,8 @@ int main() {
 
     std::sort(nums.begin(), nums.end());
     sum = sum / 5;
-    int i = 0, counter = 0, cur = 0;
+    int i = 0, counter = 0;
+    long long cur = 0;
     for (;i < n && counter < 5; i++) {
         cur += nums[i];
         if (cur == sum) {

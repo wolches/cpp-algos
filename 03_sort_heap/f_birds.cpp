@@ -6,7 +6,8 @@ int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    int n, k;
+    int n;
+    long long k;
     cin >> n >> k;
 
     vector<pair<int, int>> birds(n);
@@ -17,7 +18,7 @@ int main() {
 
     std::sort(birds.begin(), birds.end());
 
-    int cur = 0;
+    long long cur = 0;
     for (const auto &item: birds) {
         cur += item.second;
         if (cur >= k) {
