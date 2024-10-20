@@ -9,6 +9,13 @@ int preSum(vector<int>& preSums, int l, int r) {
     return preSums[r] - (l == 0 ? 0 : preSums[l - 1]);
 }
 
+int calcDay(vector<int>& data, vector<int>& preSums, vector<int>& left, vector<int>& right, int i, int n) {
+    int l = left[i] == -1 ? 0 : preSums[left[i]];
+    int r = right[i] == n ? preSums[right[n - 1]] : preSums[right[i]];
+    int sum = preSum(preSums, l, r);
+    return sum * data[i];
+}
+
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
@@ -18,9 +25,8 @@ int main() {
 
     vector<int> data(n);
     vector<int> preSums(n);
-    vector<int> prev(n);
-    vector<int> next(n);
-    vector<int> periods(n);
+    vector<int> left(n);
+    vector<int> right(n);
 
     for (int i = 0; i < n; ++i) {
         cin >> data[i];
@@ -31,38 +37,52 @@ int main() {
         }
     }
 
-    int j;
+    stack<int> mins;
     for (int i = 0; i < n; ++i) {
-        j = i;
-        if (i != 0 && data[i - 1] >= data[i]) {
-            j = prev[i - 1];
+        while (!mins.empty() && data[mins.top()] > data[i]) {
+            mins.pop();
         }
-        while ((j > -1) && (data[j] >= data[i])) {
-            j--;
-        }
-        prev[i] = j;
-    }
-
-    for(int i = n - 1; i >= 0; --i) {
-        j = i;
-        if (i != n - 1 && data[i + 1] >= data[i]) {
-            j = next[i + 1];
-        }
-        while ((j < n) && (data[j] >= data[i])) {
-            j++;
-        }
-        next[i] = j;
-    }
-
-    int idx = 0;
-    for (int i = 1; i < n; ++i) {
-        periods[i] = preSum(preSums, prev[i] + 1, next[i] - 1) * data[i];
-        if (periods[i] > periods[idx]) {
-            idx = i;
+        if (mins.empty()) {
+            left[i] = -1;
+            mins.push(i);
+        } else {
+            left[i] = mins.top();
+            mins.push(i);
         }
     }
 
-    cout << periods[idx] << '\n'
-         << prev[idx] + 2 << ' ' << next[idx];
+    while (!mins.empty()) {
+        mins.pop();
+    }
+
+    for (int i = n - 1; i >= 0; --i) {
+        while (!mins.empty() && data[mins.top()] > data[i]) {
+            mins.pop();
+        }
+        if (mins.empty()) {
+            right[i] = n;
+            mins.push(i);
+        } else {
+            right[i] = mins.top();
+            mins.push(i);
+        }
+    }
+
+    int next, max, maxRes = -1;
+    for (int i = 0; i < n; ++i) {
+        next = calcDay(data, preSums, left, right, i, n);
+        if (max == -1) {
+            max = i;
+            maxRes = next;
+            continue;
+        }
+        if (next > maxRes) {
+            max = i;
+            maxRes = next;
+        }
+    }
+
+    cout << maxRes << '\n';
+    cout << left[max] << ' ' << right[max];
 }
 
