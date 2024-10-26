@@ -6,12 +6,12 @@
 using namespace std;
 
 int preSum(vector<int>& preSums, int l, int r) {
-    return preSums[r] - (l == 0 ? 0 : preSums[l - 1]);
+    return (preSums[r]) - (l < 0 ? 0 : preSums[l - 1]);
 }
 
-int calcDay(vector<int>& data, vector<int>& preSums, vector<int>& left, vector<int>& right, int i, int n) {
+int calcDay(vector<int>& data, vector<int>& preSums, vector<int>& left, vector<int>& right, int i) {
     int l = left[i] == -1 ? 0 : preSums[left[i]];
-    int r = right[i] == n ? preSums[right[n - 1]] : preSums[right[i]];
+    int r = right[i] - 2;
     int sum = preSum(preSums, l, r);
     return sum * data[i];
 }
@@ -70,7 +70,7 @@ int main() {
 
     int next, max, maxRes = -1;
     for (int i = 0; i < n; ++i) {
-        next = calcDay(data, preSums, left, right, i, n);
+        next = calcDay(data, preSums, left, right, i);
         if (max == -1) {
             max = i;
             maxRes = next;
