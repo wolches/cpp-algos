@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-#define uint uint32_t
+#define uint uint64_t
 
 using namespace std;
 

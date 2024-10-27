@@ -34,6 +34,7 @@ int main() {
         }
     }
 
+    cout << lines.size() << '\n';
     for (const auto &item: lines) {
         cout << item.first << ' ' << item.second << '\n';
     }
