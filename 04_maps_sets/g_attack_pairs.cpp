@@ -14,24 +14,15 @@ int main() {
         cin >> a[i];
     }
 
-    multimap<int, int> res;
     for (int i = 0; i < n - k; ++i) {
-        for (int j = i + 1; j < i + k; ++j) {
+        for (int j = i + 1; j < n && j <= i + k; ++j) {
             int diff = abs(a[j] - a[i]);
-            int reverseDiff = abs(a[i] - a[j]);
-            if (
-                    (diff >= l && diff <= r)
-                    || ((reverseDiff >= l && reverseDiff <= r))
-            ) {
-                res.insert({i, j});
+            if (diff >= l && diff <= r) {
+                cout << i << ' ' << j;
+                return 0;
             }
         }
     }
 
-    if (res.size() > 0) {
-        auto first = res.begin();
-        cout << first->first << ' ' << first->second;
-    } else {
-        cout << -1 << ' ' << -1;
-    }
+    cout << -1 << ' ' << -1;
 }
