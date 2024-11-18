@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-#define int64 long long
+#define int64 size_t
 
 using namespace std;
 
@@ -42,8 +42,8 @@ int main() {
         pows[i + 1] = (pows[i] * pp) % mod;
     }
 
-    vector<size_t> iis;
-    for(size_t i = 0; i <= n - k; i++) {
+    vector<int> iis;
+    for(int i = 0; i <= n - k; i++) {
         int64 window_hash = get_hash(ht, pows, i, i + k - 1);
         if (window_hash == hp[k - 1]) {
             iis.push_back(i);

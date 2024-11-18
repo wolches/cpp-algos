@@ -42,7 +42,7 @@ int main() {
 
     int ans = 0;
     for (int i = 0; i < 10; ++i) {
-        ans += dp[i][n] % mod;
+        ans = (ans + dp[i][n]) % mod;
     }
 
     cout << ans;

@@ -26,5 +26,6 @@ int main() {
         cin >> a[i].c;
     }
 
+    // TODO
 
 }
