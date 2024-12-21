@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-#define int64 size_t
+#define int64 long long
 
 using namespace std;
 

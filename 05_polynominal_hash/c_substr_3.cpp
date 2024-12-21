@@ -3,7 +3,7 @@
 
 using namespace std;
 
-const char min_char = 'a';
+const char min_char = 'A';
 const int64 p = 31;
 const int64 mod = 1'000'000'007;
 
@@ -15,15 +15,31 @@ int64 get_hash(const vector<int64>& subhash, const vector<int64>& pows, int l, i
     return ans < 0 ? ans + mod : ans;
 }
 
-int64 fillSubs(unordered_map<int64, string>& substrings_by_hash,
-              const vector<string>& strings,
-              const vector<vector<int64>>& h,
-              const vector<int64>& pows,
-              int minIdx) {
-    int length = 1;
-
-    //vector<int64>
-
+pair<bool, string> has_substr_of_length(const vector<vector<int64>>& hashes,
+                                        const vector<string>& strings,
+                                        const vector<int64>& pows,
+                                        const int len) {
+    unordered_map<int64, pair<string, int>> res;
+    for (int i = 0; i < strings.size(); i++) {
+        unordered_map<int64, string> substrs;
+        for (int l = 0; l <= strings[i].size() - len; l++) {
+            int64 h = get_hash(hashes[i], pows, l, l + len - 1);
+            substrs[h] = strings[i].substr(l, len);
+        }
+        for (const auto &item: substrs) {
+            if (res.count(item.first)) {
+                res[item.first].second++;
+            } else {
+                res[item.first] = {item.second, 1};
+            }
+        }
+    }
+    for (const auto& item : res) {
+        if (item.second.second == strings.size()) {
+            return {true, item.second.first};
+        }
+    }
+    return {false, ""};
 }
 
 int main() {
@@ -43,20 +59,29 @@ int main() {
         }
         min_size = std::min(strings[i].size(), min_size);
     }
-    vector<vector<int64>> h(n);
+    vector<vector<int64>> h(n, vector<int64>());
     for (int i = 0; i < n; ++i) {
         h[i].push_back(strings[i][0] - min_char + 1);
         for (int j = 1; j < strings[i].size(); ++j) {
-            h[i].push_back(((h[i][j - 1] * p) + (strings[i][i] - 'a' + 1)) % mod);
+            h[i].push_back(((h[i][j - 1] * p) + (strings[i][j] - 'A' + 1)) % mod);
         }
     }
-    vector<int64> pows(max_size);
+    vector<int64> pows(max_size + 1);
     pows[0] = 1;
-    for (int i = 0; i < pows.size(); ++i) {
-        pows[i + 1] = (pows[i] * p) % mod;
+    for (int i = 1; i <= max_size; ++i) {
+        pows[i] = (pows[i - 1] * p) % mod;
     }
 
-    unordered_map<int64, string> substrings_by_hash;
-    int64 res = fillSubs(substrings_by_hash, strings, h, pows, min_str_index);
-    cout << substrings_by_hash[res];
+    int l = 0, r = min_size, m;
+    pair<bool, string> res;
+    while (l < r) {
+        m = l + (r - l + 1) / 2;
+        res = has_substr_of_length(h, strings, pows, m);
+        if (res.first) {
+            l = m;
+        } else {
+            r = m - 1;
+        }
+    }
+    cout << res.second << '\n';
 }
